@@ -2,6 +2,7 @@ import { Logger } from './Logger';
 import { AuthService } from '../application/services/AuthService';
 import { CategoryService } from '../application/services/CategoryService';
 import { ProductService } from '../application/services/ProductService';
+import { ClientService } from '../application/services/ClientService';
 import { HealthService } from '../application/services/HealthService';
 import { PurchaseService } from '../application/services/PurchaseService';
 import { CleanupService } from '../application/services/CleanupService';
@@ -10,10 +11,12 @@ import { EmailService } from '../infrastructure/services/EmailService';
 import { UserPrismaAdapter } from '../infrastructure/DbAdapters/UserPrismaAdapter';
 import { CategoryPrismaAdapter } from '../infrastructure/DbAdapters/CategoryPrismaAdapter';
 import { ProductPrismaAdapter } from '../infrastructure/DbAdapters/ProductPrismaAdapter';
+import { ClientPrismaAdapter } from '../infrastructure/DbAdapters/ClientPrismaAdapter';
 import { OrderDetailPrismaAdapter } from '../infrastructure/DbAdapters/OrderDetailPrismaAdapter';
 import { IUserDataSource } from '../domain/interfaces/IUserDataSource';
 import { ICategoryDataSource } from '../domain/interfaces/ICategoryDataSource';
 import { IProductDataSource } from '../domain/interfaces/IProductDataSource';
+import { IClientDataSource } from '../domain/interfaces/IClientDataSource';
 import { IOrderDetailDataSource } from '../domain/interfaces/IOrderDetailDataSource';
 import { getPrismaClient } from '../config/PrismaClient';
 
@@ -46,6 +49,13 @@ export class ServiceProvider {
   }
 
   /**
+   * Crea una instancia de ClientDataSource (actualmente PrismaAdapter)
+   */
+  static getClientDataSource(): IClientDataSource {
+    return new ClientPrismaAdapter();
+  }
+
+  /**
    * Crea una instancia de OrderDetailDataSource (actualmente PrismaAdapter)
    */
   static getOrderDetailDataSource(): IOrderDetailDataSource {
@@ -75,6 +85,14 @@ export class ServiceProvider {
     const productDataSource = this.getProductDataSource();
     const categoryDataSource = this.getCategoryDataSource();
     return new ProductService(logger, productDataSource, categoryDataSource);
+  }
+
+  /**
+   * Crea una instancia de ClientService con sus dependencias inyectadas
+   */
+  static getClientService(logger: Logger): ClientService {
+    const clientDataSource = this.getClientDataSource();
+    return new ClientService(logger, clientDataSource);
   }
 
   /**
@@ -129,6 +147,10 @@ export const getProductService = (logger: Logger): ProductService => {
   return ServiceProvider.getProductService(logger);
 };
 
+export const getClientService = (logger: Logger): ClientService => {
+  return ServiceProvider.getClientService(logger);
+};
+
 export const getHealthService = (logger: Logger): HealthService => {
   return ServiceProvider.getHealthService(logger);
 };
@@ -159,6 +181,10 @@ export const getCategoryDataSource = (): ICategoryDataSource => {
 
 export const getProductDataSource = (): IProductDataSource => {
   return ServiceProvider.getProductDataSource();
+};
+
+export const getClientDataSource = (): IClientDataSource => {
+  return ServiceProvider.getClientDataSource();
 };
 
 export const getOrderDetailDataSource = (): IOrderDetailDataSource => {

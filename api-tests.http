@@ -152,6 +152,38 @@ Content-Type: application/json
   ]
 }
 
+### Clients - List all clients
+GET http://localhost:7071/api/v1/clients
+
+### Clients - Filter by name
+GET http://localhost:7071/api/v1/clients?name=juan
+
+### Clients - Get client by ID
+GET http://localhost:7071/api/v1/clients/1
+
+### Clients - Create client
+POST http://localhost:7071/api/v1/clients
+Content-Type: application/json
+
+{
+  "name": "Juan Pérez",
+  "phone": "+573001112233",
+  "email": "juan.perez@ejemplo.com",
+  "notes": "Cliente frecuente"
+}
+
+### Clients - Update client
+PUT http://localhost:7071/api/v1/clients/1
+Content-Type: application/json
+
+{
+  "phone": "+573009998877",
+  "isActive": true
+}
+
+### Clients - Delete client
+DELETE http://localhost:7071/api/v1/clients/1
+
 ### Create Payment - Zero Quantity (Should fail)
 POST http://localhost:7071/api/v1/payment/create
 Content-Type: application/json
