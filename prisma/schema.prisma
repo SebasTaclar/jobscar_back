@@ -89,8 +89,77 @@ model Client {
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 
+  vehicles  Vehicle[]
+
   @@index([phone], map: "idx_clients_phone")
   @@map("clients")
+}
+
+model Vehicle {
+  id              Int       @id @default(autoincrement())
+  clientId        Int?      @map("client_id")
+  client          String
+  plate           String
+  brand           String
+  model           String
+  year            Int?
+  km              Int       @default(0)
+  vehicleType     String    @map("vehicle_type")
+  lastServiceDate DateTime? @map("last_service_date")
+  nextServiceKm   Int?      @map("next_service_km")
+  observations    String?
+  createdAt       DateTime  @default(now()) @map("created_at")
+  updatedAt       DateTime  @updatedAt @map("updated_at")
+
+  clientRelation  Client?   @relation(fields: [clientId], references: [id], onDelete: SetNull)
+  workOrders      WorkOrder[]
+
+  @@index([clientId], map: "idx_vehicles_client_id")
+  @@index([plate], map: "idx_vehicles_plate")
+  @@map("vehicles")
+}
+
+model Employee {
+  id         Int      @id @default(autoincrement())
+  name       String
+  role       String?
+  specialty  String?
+  email      String?
+  phone      String
+  status     String?  @default("Activo")
+  entryDate  DateTime @default(now()) @map("entry_date")
+  notes      String?
+  createdAt  DateTime @default(now()) @map("created_at")
+  updatedAt  DateTime @updatedAt @map("updated_at")
+
+  workOrders WorkOrder[]
+
+  @@index([phone], map: "idx_employees_phone")
+  @@map("employees")
+}
+
+model WorkOrder {
+  id           Int      @id @default(autoincrement())
+  vehicleId    Int      @map("vehicle_id")
+  mechanicId   Int?     @map("mechanic_id")
+  status       String   @default("Recepción")
+  services     String?  @db.Text
+  gases        Boolean  @default(false)
+  escaner      Boolean  @default(false)
+  observations String?  @db.Text
+  diagnosis    String?  @db.Text
+  deliveryDate DateTime? @map("delivery_date")
+  garantia     Int?
+  total        Decimal? @db.Decimal(10, 2)
+  createdAt    DateTime @default(now()) @map("created_at")
+  updatedAt    DateTime @updatedAt @map("updated_at")
+
+  vehicle  Vehicle  @relation(fields: [vehicleId], references: [id], onDelete: Cascade)
+  mechanic Employee? @relation(fields: [mechanicId], references: [id], onDelete: SetNull)
+
+  @@index([vehicleId], map: "idx_work_orders_vehicle_id")
+  @@index([mechanicId], map: "idx_work_orders_mechanic_id")
+  @@map("work_orders")
 }
 
 model Product {

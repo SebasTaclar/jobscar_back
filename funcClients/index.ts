@@ -12,8 +12,20 @@ const funcClients = async (_context: Context, req: HttpRequest, log: Logger): Pr
   const method = req.method?.toUpperCase();
   const clientId = req.params?.id;
 
+  const authHeader = req.headers.authorization || req.headers.Authorization;
+  if (!authHeader) {
+    throw new AuthenticationError('Unauthorized: Missing authorization header');
+  }
+
+  const token = validateAuthToken(authHeader);
+  const userPayload = verifyToken(token);
+
   if (method === 'GET') {
-    log.logInfo(`Processing ${method} request for clients (public)`, { clientId });
+    log.logInfo(`User authenticated successfully: ${userPayload.email}`);
+    log.logInfo(`Processing ${method} request for clients (authenticated)`, {
+      clientId,
+      userId: userPayload.id,
+    });
 
     if (clientId) {
       const client = await clientService.getClientById(clientId);
@@ -29,15 +41,6 @@ const funcClients = async (_context: Context, req: HttpRequest, log: Logger): Pr
       'Clients retrieved successfully'
     );
   }
-
-  const authHeader = req.headers.authorization || req.headers.Authorization;
-
-  if (!authHeader) {
-    throw new AuthenticationError('Unauthorized: Missing authorization header');
-  }
-
-  const token = validateAuthToken(authHeader);
-  const userPayload = verifyToken(token);
 
   log.logInfo(`User authenticated successfully: ${userPayload.email}`);
   log.logInfo(`Processing ${method} request for clients (authenticated)`, {

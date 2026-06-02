@@ -154,16 +154,20 @@ Content-Type: application/json
 
 ### Clients - List all clients
 GET http://localhost:7071/api/v1/clients
+Authorization: Bearer <JWT_TOKEN>
 
 ### Clients - Filter by name
 GET http://localhost:7071/api/v1/clients?name=juan
+Authorization: Bearer <JWT_TOKEN>
 
 ### Clients - Get client by ID
 GET http://localhost:7071/api/v1/clients/1
+Authorization: Bearer <JWT_TOKEN>
 
 ### Clients - Create client
 POST http://localhost:7071/api/v1/clients
 Content-Type: application/json
+Authorization: Bearer <JWT_TOKEN>
 
 {
   "name": "Juan Pérez",
@@ -175,6 +179,7 @@ Content-Type: application/json
 ### Clients - Update client
 PUT http://localhost:7071/api/v1/clients/1
 Content-Type: application/json
+Authorization: Bearer <JWT_TOKEN>
 
 {
   "phone": "+573009998877",
@@ -183,6 +188,136 @@ Content-Type: application/json
 
 ### Clients - Delete client
 DELETE http://localhost:7071/api/v1/clients/1
+Authorization: Bearer <JWT_TOKEN>
+
+### Vehicles - List all vehicles
+GET http://localhost:7071/api/v1/vehicles
+Authorization: Bearer <JWT_TOKEN>
+
+### Vehicles - Filter by plate
+GET http://localhost:7071/api/v1/vehicles?plate=ABC123
+Authorization: Bearer <JWT_TOKEN>
+
+### Vehicles - Get vehicle by ID
+GET http://localhost:7071/api/v1/vehicles/1
+Authorization: Bearer <JWT_TOKEN>
+
+### Vehicles - Create vehicle
+POST http://localhost:7071/api/v1/vehicles
+Content-Type: application/json
+Authorization: Bearer <JWT_TOKEN>
+
+{
+  "clientId": 1,
+  "plate": "ABC123",
+  "brand": "Toyota",
+  "model": "Corolla",
+  "year": 2022,
+  "km": 15000,
+  "vehicleType": "Camioneta",
+  "lastServiceDate": "2026-05-15",
+  "nextServiceKm": 20000,
+  "observations": "Vehículo de uso personal"
+}
+
+### Vehicles - Update vehicle
+PUT http://localhost:7071/api/v1/vehicles/1
+Content-Type: application/json
+Authorization: Bearer <JWT_TOKEN>
+
+{
+  "km": 16000,
+  "observations": "Cambio de aceite reciente"
+}
+
+### Vehicles - Delete vehicle
+DELETE http://localhost:7071/api/v1/vehicles/1
+Authorization: Bearer <JWT_TOKEN>
+
+### Employees - List all employees
+GET http://localhost:7071/api/v1/employees
+Authorization: Bearer <JWT_TOKEN>
+
+### Employees - Filter employees by name
+GET http://localhost:7071/api/v1/employees?name=Ana
+Authorization: Bearer <JWT_TOKEN>
+
+### Employees - Get employee by ID
+GET http://localhost:7071/api/v1/employees/1
+Authorization: Bearer <JWT_TOKEN>
+
+### Employees - Create employee
+POST http://localhost:7071/api/v1/employees
+Content-Type: application/json
+Authorization: Bearer <JWT_TOKEN>
+
+{
+  "name": "Ana Martínez",
+  "role": "Tecnico",
+  "specialty": "Mecánica automotriz",
+  "email": "ana.martinez@ejemplo.com",
+  "phone": "+573001234567",
+  "entryDate": "2026-06-01",
+  "notes": "Disponibilidad inmediata"
+}
+
+### Employees - Update employee
+PUT http://localhost:7071/api/v1/employees/1
+Content-Type: application/json
+Authorization: Bearer <JWT_TOKEN>
+
+{
+  "phone": "+573009998877",
+  "specialty": "Mecánica y electricidad",
+  "notes": "Cambio de especialidad"
+}
+
+### Employees - Delete employee
+DELETE http://localhost:7071/api/v1/employees/1
+Authorization: Bearer <JWT_TOKEN>
+
+### Work Orders - List all work orders
+GET http://localhost:7071/api/v1/work-orders
+Authorization: Bearer <JWT_TOKEN>
+
+### Work Orders - Get work order by ID
+GET http://localhost:7071/api/v1/work-orders/1
+Authorization: Bearer <JWT_TOKEN>
+
+### Work Orders - Create work order
+POST http://localhost:7071/api/v1/work-orders
+Content-Type: application/json
+Authorization: Bearer <JWT_TOKEN>
+
+{
+  "vehicleId": 1,
+  "mechanicId": 2,
+  "status": "Recepción",
+  "services": ["Cambio de aceite", "Alineación"],
+  "gases": true,
+  "escaner": false,
+  "observations": "Revisión general y diagnóstico previo",
+  "diagnosis": "Motor funcionando correctamente",
+  "deliveryDate": "2026-06-10",
+  "garantia": 90,
+  "total": 120000
+}
+
+### Work Orders - Update work order
+PUT http://localhost:7071/api/v1/work-orders/1
+Content-Type: application/json
+Authorization: Bearer <JWT_TOKEN>
+
+{
+  "status": "Diagnóstico",
+  "services": ["Cambio de aceite", "Frenos"],
+  "diagnosis": "Se requiere cambio de pastillas de freno",
+  "total": 145000
+}
+
+### Work Orders - Delete work order
+DELETE http://localhost:7071/api/v1/work-orders/1
+Authorization: Bearer <JWT_TOKEN>
 
 ### Create Payment - Zero Quantity (Should fail)
 POST http://localhost:7071/api/v1/payment/create

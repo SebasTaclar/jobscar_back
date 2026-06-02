@@ -3,6 +3,9 @@ import { AuthService } from '../application/services/AuthService';
 import { CategoryService } from '../application/services/CategoryService';
 import { ProductService } from '../application/services/ProductService';
 import { ClientService } from '../application/services/ClientService';
+import { VehicleService } from '../application/services/VehicleService';
+import { EmployeeService } from '../application/services/EmployeeService';
+import { WorkOrderService } from '../application/services/WorkOrderService';
 import { HealthService } from '../application/services/HealthService';
 import { PurchaseService } from '../application/services/PurchaseService';
 import { CleanupService } from '../application/services/CleanupService';
@@ -12,11 +15,17 @@ import { UserPrismaAdapter } from '../infrastructure/DbAdapters/UserPrismaAdapte
 import { CategoryPrismaAdapter } from '../infrastructure/DbAdapters/CategoryPrismaAdapter';
 import { ProductPrismaAdapter } from '../infrastructure/DbAdapters/ProductPrismaAdapter';
 import { ClientPrismaAdapter } from '../infrastructure/DbAdapters/ClientPrismaAdapter';
+import { VehiclePrismaAdapter } from '../infrastructure/DbAdapters/VehiclePrismaAdapter';
 import { OrderDetailPrismaAdapter } from '../infrastructure/DbAdapters/OrderDetailPrismaAdapter';
+import { EmployeePrismaAdapter } from '../infrastructure/DbAdapters/EmployeePrismaAdapter';
+import { WorkOrderPrismaAdapter } from '../infrastructure/DbAdapters/WorkOrderPrismaAdapter';
 import { IUserDataSource } from '../domain/interfaces/IUserDataSource';
 import { ICategoryDataSource } from '../domain/interfaces/ICategoryDataSource';
 import { IProductDataSource } from '../domain/interfaces/IProductDataSource';
 import { IClientDataSource } from '../domain/interfaces/IClientDataSource';
+import { IVehicleDataSource } from '../domain/interfaces/IVehicleDataSource';
+import { IEmployeeDataSource } from '../domain/interfaces/IEmployeeDataSource';
+import { IWorkOrderDataSource } from '../domain/interfaces/IWorkOrderDataSource';
 import { IOrderDetailDataSource } from '../domain/interfaces/IOrderDetailDataSource';
 import { getPrismaClient } from '../config/PrismaClient';
 
@@ -55,11 +64,30 @@ export class ServiceProvider {
     return new ClientPrismaAdapter();
   }
 
+  static getVehicleDataSource(): IVehicleDataSource {
+    return new VehiclePrismaAdapter();
+  }
+
+  static getEmployeeDataSource(): IEmployeeDataSource {
+    return new EmployeePrismaAdapter();
+  }
+
+  static getWorkOrderDataSource(): IWorkOrderDataSource {
+    return new WorkOrderPrismaAdapter();
+  }
+
   /**
    * Crea una instancia de OrderDetailDataSource (actualmente PrismaAdapter)
    */
   static getOrderDetailDataSource(): IOrderDetailDataSource {
     return new OrderDetailPrismaAdapter();
+  }
+
+  static getWorkOrderService(logger: Logger): WorkOrderService {
+    const workOrderDataSource = this.getWorkOrderDataSource();
+    const vehicleDataSource = this.getVehicleDataSource();
+    const employeeDataSource = this.getEmployeeDataSource();
+    return new WorkOrderService(logger, workOrderDataSource, vehicleDataSource, employeeDataSource);
   }
 
   /**
@@ -93,6 +121,17 @@ export class ServiceProvider {
   static getClientService(logger: Logger): ClientService {
     const clientDataSource = this.getClientDataSource();
     return new ClientService(logger, clientDataSource);
+  }
+
+  static getVehicleService(logger: Logger): VehicleService {
+    const vehicleDataSource = this.getVehicleDataSource();
+    const clientDataSource = this.getClientDataSource();
+    return new VehicleService(logger, vehicleDataSource, clientDataSource);
+  }
+
+  static getEmployeeService(logger: Logger): EmployeeService {
+    const employeeDataSource = this.getEmployeeDataSource();
+    return new EmployeeService(logger, employeeDataSource);
   }
 
   /**
@@ -151,6 +190,10 @@ export const getClientService = (logger: Logger): ClientService => {
   return ServiceProvider.getClientService(logger);
 };
 
+export const getVehicleService = (logger: Logger): VehicleService => {
+  return ServiceProvider.getVehicleService(logger);
+};
+
 export const getHealthService = (logger: Logger): HealthService => {
   return ServiceProvider.getHealthService(logger);
 };
@@ -171,6 +214,10 @@ export const getMercadoPagoService = (): MercadoPagoService => {
   return ServiceProvider.getMercadoPagoService();
 };
 
+export const getEmployeeService = (logger: Logger): EmployeeService => {
+  return ServiceProvider.getEmployeeService(logger);
+};
+
 export const getUserDataSource = (): IUserDataSource => {
   return ServiceProvider.getUserDataSource();
 };
@@ -187,6 +234,22 @@ export const getClientDataSource = (): IClientDataSource => {
   return ServiceProvider.getClientDataSource();
 };
 
+export const getVehicleDataSource = (): IVehicleDataSource => {
+  return ServiceProvider.getVehicleDataSource();
+};
+
+export const getEmployeeDataSource = (): IEmployeeDataSource => {
+  return ServiceProvider.getEmployeeDataSource();
+};
+
+export const getWorkOrderDataSource = (): IWorkOrderDataSource => {
+  return ServiceProvider.getWorkOrderDataSource();
+};
+
 export const getOrderDetailDataSource = (): IOrderDetailDataSource => {
   return ServiceProvider.getOrderDetailDataSource();
+};
+
+export const getWorkOrderService = (logger: Logger): WorkOrderService => {
+  return ServiceProvider.getWorkOrderService(logger);
 };

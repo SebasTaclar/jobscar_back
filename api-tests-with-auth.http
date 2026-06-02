@@ -94,6 +94,70 @@ Authorization: {{token}}
 }
 
 ###
+# VEHICLES ENDPOINTS
+###
+
+### 9v. Obtener todos los vehículos - público
+GET {{baseUrl}}/api/v1/vehicles
+
+### 9v. Obtener vehículos filtrando por placa
+GET {{baseUrl}}/api/v1/vehicles?plate=ABC123
+
+### 9v. Obtener vehículo por ID
+GET {{baseUrl}}/api/v1/vehicles/1
+
+### 9v. Obtener vehículo por ID inexistente (debe fallar con 404)
+GET {{baseUrl}}/api/v1/vehicles/999999
+
+### 9v. Crear vehículo - CON token válido
+POST {{baseUrl}}/api/v1/vehicles
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "clientId": 1,
+  "plate": "ABC123",
+  "brand": "Toyota",
+  "model": "Corolla",
+  "year": 2022,
+  "km": 15000,
+  "vehicleType": "Sedan",
+  "status": "active",
+  "lastServiceDate": "2026-05-15",
+  "nextServiceKm": 20000,
+  "observations": "Vehículo de uso personal"
+}
+
+### 9v. Crear vehículo - SIN token (debe fallar con 401)
+POST {{baseUrl}}/api/v1/vehicles
+Content-Type: application/json
+
+{
+  "client": "Sin Token",
+  "plate": "XYZ999",
+  "brand": "Honda",
+  "model": "Civic",
+  "km": 10000,
+  "vehicleType": "Sedan",
+  "status": "active"
+}
+
+### 9v. Actualizar vehículo - CON token válido
+PUT {{baseUrl}}/api/v1/vehicles/1
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "km": 16000,
+  "status": "active",
+  "observations": "Cambio de aceite reciente"
+}
+
+### 9v. Eliminar vehículo - CON token válido
+DELETE {{baseUrl}}/api/v1/vehicles/1
+Authorization: Bearer {{token}}
+
+###
 # CATEGORIES ENDPOINTS (Require JWT Authentication)
 ###
 
