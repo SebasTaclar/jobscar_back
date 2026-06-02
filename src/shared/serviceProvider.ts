@@ -6,6 +6,7 @@ import { ClientService } from '../application/services/ClientService';
 import { VehicleService } from '../application/services/VehicleService';
 import { EmployeeService } from '../application/services/EmployeeService';
 import { WorkOrderService } from '../application/services/WorkOrderService';
+import { AppointmentService } from '../application/services/AppointmentService';
 import { HealthService } from '../application/services/HealthService';
 import { PurchaseService } from '../application/services/PurchaseService';
 import { CleanupService } from '../application/services/CleanupService';
@@ -19,12 +20,14 @@ import { VehiclePrismaAdapter } from '../infrastructure/DbAdapters/VehiclePrisma
 import { OrderDetailPrismaAdapter } from '../infrastructure/DbAdapters/OrderDetailPrismaAdapter';
 import { EmployeePrismaAdapter } from '../infrastructure/DbAdapters/EmployeePrismaAdapter';
 import { WorkOrderPrismaAdapter } from '../infrastructure/DbAdapters/WorkOrderPrismaAdapter';
+import { AppointmentPrismaAdapter } from '../infrastructure/DbAdapters/AppointmentPrismaAdapter';
 import { IUserDataSource } from '../domain/interfaces/IUserDataSource';
 import { ICategoryDataSource } from '../domain/interfaces/ICategoryDataSource';
 import { IProductDataSource } from '../domain/interfaces/IProductDataSource';
 import { IClientDataSource } from '../domain/interfaces/IClientDataSource';
 import { IVehicleDataSource } from '../domain/interfaces/IVehicleDataSource';
 import { IEmployeeDataSource } from '../domain/interfaces/IEmployeeDataSource';
+import { IAppointmentDataSource } from '../domain/interfaces/IAppointmentDataSource';
 import { IWorkOrderDataSource } from '../domain/interfaces/IWorkOrderDataSource';
 import { IOrderDetailDataSource } from '../domain/interfaces/IOrderDetailDataSource';
 import { getPrismaClient } from '../config/PrismaClient';
@@ -76,6 +79,10 @@ export class ServiceProvider {
     return new WorkOrderPrismaAdapter();
   }
 
+  static getAppointmentDataSource(): IAppointmentDataSource {
+    return new AppointmentPrismaAdapter();
+  }
+
   /**
    * Crea una instancia de OrderDetailDataSource (actualmente PrismaAdapter)
    */
@@ -88,6 +95,11 @@ export class ServiceProvider {
     const vehicleDataSource = this.getVehicleDataSource();
     const employeeDataSource = this.getEmployeeDataSource();
     return new WorkOrderService(logger, workOrderDataSource, vehicleDataSource, employeeDataSource);
+  }
+
+  static getAppointmentService(logger: Logger): AppointmentService {
+    const appointmentDataSource = this.getAppointmentDataSource();
+    return new AppointmentService(logger, appointmentDataSource);
   }
 
   /**
@@ -246,8 +258,16 @@ export const getWorkOrderDataSource = (): IWorkOrderDataSource => {
   return ServiceProvider.getWorkOrderDataSource();
 };
 
+export const getAppointmentDataSource = (): IAppointmentDataSource => {
+  return ServiceProvider.getAppointmentDataSource();
+};
+
 export const getOrderDetailDataSource = (): IOrderDetailDataSource => {
   return ServiceProvider.getOrderDetailDataSource();
+};
+
+export const getAppointmentService = (logger: Logger): AppointmentService => {
+  return ServiceProvider.getAppointmentService(logger);
 };
 
 export const getWorkOrderService = (logger: Logger): WorkOrderService => {

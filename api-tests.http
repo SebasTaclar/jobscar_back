@@ -319,6 +319,40 @@ Authorization: Bearer <JWT_TOKEN>
 DELETE http://localhost:7071/api/v1/work-orders/1
 Authorization: Bearer <JWT_TOKEN>
 
+### Appointments - List all appointments
+GET http://localhost:7071/api/v1/appointments
+Authorization: Bearer <JWT_TOKEN>
+
+### Appointments - Get appointment by ID
+GET http://localhost:7071/api/v1/appointments/1
+Authorization: Bearer <JWT_TOKEN>
+
+### Appointments - Create appointment
+POST http://localhost:7071/api/v1/appointments
+Content-Type: application/json
+Authorization: Bearer <JWT_TOKEN>
+
+{
+  "date": "2026-06-15T10:30:00.000Z",
+  "plate": "ABC123",
+  "client": "Juan Pérez",
+  "subject": "Cambio de aceite"
+}
+
+### Appointments - Update appointment
+PUT http://localhost:7071/api/v1/appointments/1
+Content-Type: application/json
+Authorization: Bearer <JWT_TOKEN>
+
+{
+  "date": "2026-06-15T11:00:00.000Z",
+  "subject": "Cambio de aceite y revisión de frenos"
+}
+
+### Appointments - Delete appointment
+DELETE http://localhost:7071/api/v1/appointments/1
+Authorization: Bearer <JWT_TOKEN>
+
 ### Create Payment - Zero Quantity (Should fail)
 POST http://localhost:7071/api/v1/payment/create
 Content-Type: application/json

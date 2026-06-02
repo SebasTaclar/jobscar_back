@@ -162,6 +162,18 @@ model WorkOrder {
   @@map("work_orders")
 }
 
+model Appointment {
+  id         Int      @id @default(autoincrement())
+  date       DateTime
+  plate      String?
+  client     String?
+  subject    String?
+  createdAt  DateTime @default(now()) @map("created_at")
+  updatedAt  DateTime @updatedAt @map("updated_at")
+
+  @@map("appointments")
+}
+
 model Product {
   id             Int      @id @default(autoincrement())
   name           String
