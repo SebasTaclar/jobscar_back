@@ -21,6 +21,9 @@ import { OrderDetailPrismaAdapter } from '../infrastructure/DbAdapters/OrderDeta
 import { EmployeePrismaAdapter } from '../infrastructure/DbAdapters/EmployeePrismaAdapter';
 import { WorkOrderPrismaAdapter } from '../infrastructure/DbAdapters/WorkOrderPrismaAdapter';
 import { AppointmentPrismaAdapter } from '../infrastructure/DbAdapters/AppointmentPrismaAdapter';
+import { InvoicePrismaAdapter } from '../infrastructure/DbAdapters/InvoicePrismaAdapter';
+import { IInvoiceDataSource } from '../domain/interfaces/IInvoiceDataSource';
+import { InvoiceService } from '../application/services/InvoiceService';
 import { IUserDataSource } from '../domain/interfaces/IUserDataSource';
 import { ICategoryDataSource } from '../domain/interfaces/ICategoryDataSource';
 import { IProductDataSource } from '../domain/interfaces/IProductDataSource';
@@ -81,6 +84,17 @@ export class ServiceProvider {
 
   static getAppointmentDataSource(): IAppointmentDataSource {
     return new AppointmentPrismaAdapter();
+  }
+
+  static getInvoiceDataSource(): IInvoiceDataSource {
+    return new InvoicePrismaAdapter();
+  }
+
+  static getInvoiceService(logger: Logger): InvoiceService {
+    const invoiceDataSource = this.getInvoiceDataSource();
+    const workOrderDataSource = this.getWorkOrderDataSource();
+    const vehicleDataSource = this.getVehicleDataSource();
+    return new InvoiceService(logger, invoiceDataSource, workOrderDataSource, vehicleDataSource);
   }
 
   /**
@@ -272,4 +286,8 @@ export const getAppointmentService = (logger: Logger): AppointmentService => {
 
 export const getWorkOrderService = (logger: Logger): WorkOrderService => {
   return ServiceProvider.getWorkOrderService(logger);
+};
+
+export const getInvoiceService = (logger: Logger): InvoiceService => {
+  return ServiceProvider.getInvoiceService(logger);
 };

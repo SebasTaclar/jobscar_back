@@ -353,6 +353,130 @@ Authorization: Bearer <JWT_TOKEN>
 DELETE http://localhost:7071/api/v1/appointments/1
 Authorization: Bearer <JWT_TOKEN>
 
+### Invoices - List all invoices
+GET http://localhost:7071/api/v1/invoices
+Authorization: Bearer <JWT_TOKEN>
+
+### Invoices - Filter by status
+GET http://localhost:7071/api/v1/invoices?status=Pendiente
+Authorization: Bearer <JWT_TOKEN>
+
+### Invoices - Get invoice by ID
+GET http://localhost:7071/api/v1/invoices/1
+Authorization: Bearer <JWT_TOKEN>
+
+### Invoices - Create invoice with all fields (con workOrderId)
+POST http://localhost:7071/api/v1/invoices
+Content-Type: application/json
+Authorization: Bearer <JWT_TOKEN>
+
+{
+  "workOrderId": 1,
+  "items": [
+    { "description": "Cambio de aceite", "qty": 1, "price": 80000, "isLabor": true },
+    { "description": "Filtro de aceite", "qty": 1, "price": 35000, "isLabor": false },
+    { "description": "Alineación y balanceo", "qty": 1, "price": 60000, "isLabor": true }
+  ],
+  "taxPct": true,
+  "discount": 10000,
+  "retention": 5000,
+  "deposits": [
+    { "amount": 50000, "date": "2026-06-09", "method": "Efectivo" },
+    { "amount": 30000, "date": "2026-06-10", "method": "Transferencia" }
+  ],
+  "formaDePago": "Efectivo",
+  "status": "Pendiente",
+  "notes": "Cliente frecuente - aplicar descuento"
+}
+
+### Invoices - Create invoice without workOrderId (solo items)
+POST http://localhost:7071/api/v1/invoices
+Content-Type: application/json
+Authorization: Bearer <JWT_TOKEN>
+
+{
+  "items": [
+    { "description": "Lavado general", "qty": 1, "price": 25000, "isLabor": true },
+    { "description": "Cera líquida", "qty": 1, "price": 15000, "isLabor": false }
+  ],
+  "taxPct": false,
+  "status": "Pagado",
+  "notes": "Servicio express"
+}
+
+### Invoices - Create invoice minimal (solo campos obligatorios)
+POST http://localhost:7071/api/v1/invoices
+Content-Type: application/json
+Authorization: Bearer <JWT_TOKEN>
+
+{
+  "status": "Pendiente"
+}
+
+### Invoices - Update invoice
+PUT http://localhost:7071/api/v1/invoices/1
+Content-Type: application/json
+Authorization: Bearer <JWT_TOKEN>
+
+{
+  "status": "Pagado",
+  "formaDePago": "Tarjeta de crédito",
+  "deposits": [
+    { "amount": 175000, "date": "2026-06-10", "method": "Tarjeta de crédito" }
+  ],
+  "notes": "Pagado en su totalidad"
+}
+
+### Invoices - Update invoice (agregar items a factura existente)
+PUT http://localhost:7071/api/v1/invoices/1
+Content-Type: application/json
+Authorization: Bearer <JWT_TOKEN>
+
+{
+  "items": [
+    { "description": "Cambio de aceite", "qty": 1, "price": 80000, "isLabor": true },
+    { "description": "Filtro de aceite", "qty": 1, "price": 35000, "isLabor": false },
+    { "description": "Alineación y balanceo", "qty": 1, "price": 60000, "isLabor": true },
+    { "description": "Pastillas de freno", "qty": 1, "price": 45000, "isLabor": false }
+  ],
+  "taxPct": true,
+  "discount": 15000,
+  "retention": 5000,
+  "deposits": [
+    { "amount": 80000, "date": "2026-06-09", "method": "Efectivo" }
+  ]
+}
+
+### Invoices - Delete invoice
+DELETE http://localhost:7071/api/v1/invoices/1
+Authorization: Bearer <JWT_TOKEN>
+
+### Invoices - Error: Get invoice by non-existent ID
+GET http://localhost:7071/api/v1/invoices/99999
+Authorization: Bearer <JWT_TOKEN>
+
+### Invoices - Error: Create with ID in URL (should fail)
+POST http://localhost:7071/api/v1/invoices/1
+Content-Type: application/json
+Authorization: Bearer <JWT_TOKEN>
+
+{
+  "status": "Pendiente"
+}
+
+### Invoices - Error: Update without ID (should fail)
+PUT http://localhost:7071/api/v1/invoices
+Content-Type: application/json
+Authorization: Bearer <JWT_TOKEN>
+
+{
+  "status": "Pagado"
+}
+
+### Invoices - Error: Delete without ID (should fail)
+DELETE http://localhost:7071/api/v1/invoices
+Authorization: Bearer <JWT_TOKEN>
+
 ### Create Payment - Zero Quantity (Should fail)
 POST http://localhost:7071/api/v1/payment/create
 Content-Type: application/json

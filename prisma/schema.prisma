@@ -154,12 +154,33 @@ model WorkOrder {
   createdAt    DateTime @default(now()) @map("created_at")
   updatedAt    DateTime @updatedAt @map("updated_at")
 
-  vehicle  Vehicle  @relation(fields: [vehicleId], references: [id], onDelete: Cascade)
+  vehicle  Vehicle   @relation(fields: [vehicleId], references: [id], onDelete: Cascade)
   mechanic Employee? @relation(fields: [mechanicId], references: [id], onDelete: SetNull)
+  invoices Invoice[]
 
   @@index([vehicleId], map: "idx_work_orders_vehicle_id")
   @@index([mechanicId], map: "idx_work_orders_mechanic_id")
   @@map("work_orders")
+}
+
+model Invoice {
+  id          Int       @id @default(autoincrement())
+  workOrderId Int?      @map("work_order_id")
+  items       String?
+  taxPct      Boolean?  @map("tax_pct")
+  discount    Decimal?  @db.Decimal(10, 2)
+  retention   Decimal?  @db.Decimal(10, 2)
+  deposits    String?
+  formaDePago String?   @map("forma_de_pago")
+  status      String?   @default("Pendiente")
+  notes       String?
+  createdAt   DateTime  @default(now()) @map("created_at")
+  updatedAt   DateTime  @updatedAt @map("updated_at")
+
+  workOrder  WorkOrder? @relation(fields: [workOrderId], references: [id], onDelete: SetNull)
+
+  @@index([workOrderId], map: "idx_invoices_work_order_id")
+  @@map("invoices")
 }
 
 model Appointment {
