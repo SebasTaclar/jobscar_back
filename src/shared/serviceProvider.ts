@@ -27,6 +27,9 @@ import { InvoiceService } from '../application/services/InvoiceService';
 import { SparePartPrismaAdapter } from '../infrastructure/DbAdapters/SparePartPrismaAdapter';
 import { ISparePartDataSource } from '../domain/interfaces/ISparePartDataSource';
 import { SparePartService } from '../application/services/SparePartService';
+import { MoneyMovementPrismaAdapter } from '../infrastructure/DbAdapters/MoneyMovementPrismaAdapter';
+import { IMoneyMovementDataSource } from '../domain/interfaces/IMoneyMovementDataSource';
+import { MoneyMovementService } from '../application/services/MoneyMovementService';
 import { IUserDataSource } from '../domain/interfaces/IUserDataSource';
 import { ICategoryDataSource } from '../domain/interfaces/ICategoryDataSource';
 import { IProductDataSource } from '../domain/interfaces/IProductDataSource';
@@ -85,6 +88,10 @@ export class ServiceProvider {
     return new SparePartPrismaAdapter();
   }
 
+  static getMoneyMovementDataSource(): IMoneyMovementDataSource {
+    return new MoneyMovementPrismaAdapter();
+  }
+
   static getWorkOrderDataSource(): IWorkOrderDataSource {
     return new WorkOrderPrismaAdapter();
   }
@@ -100,6 +107,11 @@ export class ServiceProvider {
   static getSparePartService(logger: Logger): SparePartService {
     const sparePartDataSource = this.getSparePartDataSource();
     return new SparePartService(logger, sparePartDataSource, this.prismaClient);
+  }
+
+  static getMoneyMovementService(logger: Logger): MoneyMovementService {
+    const moneyMovementDataSource = this.getMoneyMovementDataSource();
+    return new MoneyMovementService(logger, moneyMovementDataSource);
   }
 
   static getInvoiceService(logger: Logger): InvoiceService {
@@ -293,6 +305,10 @@ export const getOrderDetailDataSource = (): IOrderDetailDataSource => {
   return ServiceProvider.getOrderDetailDataSource();
 };
 
+export const getMoneyMovementDataSource = (): IMoneyMovementDataSource => {
+  return ServiceProvider.getMoneyMovementDataSource();
+};
+
 export const getAppointmentService = (logger: Logger): AppointmentService => {
   return ServiceProvider.getAppointmentService(logger);
 };
@@ -307,4 +323,8 @@ export const getInvoiceService = (logger: Logger): InvoiceService => {
 
 export const getSparePartService = (logger: Logger): SparePartService => {
   return ServiceProvider.getSparePartService(logger);
+};
+
+export const getMoneyMovementService = (logger: Logger): MoneyMovementService => {
+  return ServiceProvider.getMoneyMovementService(logger);
 };

@@ -234,3 +234,18 @@ model Product {
   @@index([isShowcase], map: "idx_products_showcase")
   @@map("products")
 }
+
+model MoneyMovement {
+  id          Int      @id @default(autoincrement())
+  reference   String?
+  name        String
+  concept     String
+  movement    String
+  amount      Decimal  @db.Decimal(10, 2)
+  account     String?
+  observation String?
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  @@map("money_movements")
+}

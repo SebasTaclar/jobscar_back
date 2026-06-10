@@ -545,6 +545,161 @@ Authorization: Bearer <JWT_TOKEN>
 DELETE http://localhost:7071/api/v1/spare-parts/1
 Authorization: Bearer <JWT_TOKEN>
 
+###
+# MONEY MOVEMENTS ENDPOINTS (Require JWT Authentication)
+###
+
+### Money Movements - List all money movements
+GET http://localhost:7071/api/v1/money-movements
+Authorization: Bearer <JWT_TOKEN>
+
+### Money Movements - Filter by movement type
+GET http://localhost:7071/api/v1/money-movements?movement=INGRESO
+Authorization: Bearer <JWT_TOKEN>
+
+### Money Movements - Filter by account
+GET http://localhost:7071/api/v1/money-movements?account=Caja Principal
+Authorization: Bearer <JWT_TOKEN>
+
+### Money Movements - Filter by name (search)
+GET http://localhost:7071/api/v1/money-movements?name=pago
+Authorization: Bearer <JWT_TOKEN>
+
+### Money Movements - Get money movement by ID
+GET http://localhost:7071/api/v1/money-movements/1
+Authorization: Bearer <JWT_TOKEN>
+
+### Money Movements - Get money movement by non-existent ID (should fail 404)
+GET http://localhost:7071/api/v1/money-movements/999999
+Authorization: Bearer <JWT_TOKEN>
+
+### Money Movements - Create money movement with all fields
+POST http://localhost:7071/api/v1/money-movements
+Content-Type: application/json
+Authorization: Bearer <JWT_TOKEN>
+
+{
+  "reference": "REF-001",
+  "name": "Pago de cliente",
+  "concept": "Pago por servicios de mantenimiento",
+  "movement": "INGRESO",
+  "amount": 150000,
+  "account": "Caja Principal",
+  "observation": "Pago en efectivo"
+}
+
+### Money Movements - Create money movement with required fields only
+POST http://localhost:7071/api/v1/money-movements
+Content-Type: application/json
+Authorization: Bearer <JWT_TOKEN>
+
+{
+  "name": "Compra de insumos",
+  "concept": "Aceite y filtros",
+  "movement": "EGRESO",
+  "amount": 45000
+}
+
+### Money Movements - Create transfer movement
+POST http://localhost:7071/api/v1/money-movements
+Content-Type: application/json
+Authorization: Bearer <JWT_TOKEN>
+
+{
+  "name": "Transferencia entre cuentas",
+  "concept": "Fondos para operaciones",
+  "movement": "TRANSFERENCIA",
+  "amount": 200000,
+  "account": "Banco Principal"
+}
+
+### Money Movements - Create with missing required fields (should fail 400)
+POST http://localhost:7071/api/v1/money-movements
+Content-Type: application/json
+Authorization: Bearer <JWT_TOKEN>
+
+{
+  "reference": "REF-FAIL"
+}
+
+### Money Movements - Create with empty body (should fail 400)
+POST http://localhost:7071/api/v1/money-movements
+Content-Type: application/json
+Authorization: Bearer <JWT_TOKEN>
+
+{}
+
+### Money Movements - Create with ID in URL (should fail)
+POST http://localhost:7071/api/v1/money-movements/1
+Content-Type: application/json
+Authorization: Bearer <JWT_TOKEN>
+
+{
+  "name": "Should fail",
+  "concept": "Test",
+  "movement": "INGRESO",
+  "amount": 10000
+}
+
+### Money Movements - Update money movement - all fields
+PUT http://localhost:7071/api/v1/money-movements/1
+Content-Type: application/json
+Authorization: Bearer <JWT_TOKEN>
+
+{
+  "reference": "REF-001-UPD",
+  "name": "Pago de cliente actualizado",
+  "concept": "Pago por servicios de mantenimiento y diagnóstico",
+  "movement": "INGRESO",
+  "amount": 175000,
+  "account": "Caja Principal",
+  "observation": "Pago en efectivo - actualizado"
+}
+
+### Money Movements - Update money movement - partial fields
+PUT http://localhost:7071/api/v1/money-movements/1
+Content-Type: application/json
+Authorization: Bearer <JWT_TOKEN>
+
+{
+  "amount": 200000,
+  "observation": "Monto corregido"
+}
+
+### Money Movements - Update money movement - change movement type
+PUT http://localhost:7071/api/v1/money-movements/1
+Content-Type: application/json
+Authorization: Bearer <JWT_TOKEN>
+
+{
+  "movement": "EGRESO",
+  "concept": "Reembolso al cliente"
+}
+
+### Money Movements - Update with non-existent ID (should fail 404)
+PUT http://localhost:7071/api/v1/money-movements/999999
+Content-Type: application/json
+Authorization: Bearer <JWT_TOKEN>
+
+{
+  "name": "Inexistente"
+}
+
+### Money Movements - Update with empty body (should fail 400)
+PUT http://localhost:7071/api/v1/money-movements/1
+Content-Type: application/json
+Authorization: Bearer <JWT_TOKEN>
+
+{}
+
+### Money Movements - Delete money movement
+DELETE http://localhost:7071/api/v1/money-movements/1
+Authorization: Bearer <JWT_TOKEN>
+
+### Money Movements - Delete with non-existent ID (should fail 404)
+DELETE http://localhost:7071/api/v1/money-movements/999999
+Authorization: Bearer <JWT_TOKEN>
+
 ### Create Payment - Zero Quantity (Should fail)
 POST http://localhost:7071/api/v1/payment/create
 Content-Type: application/json
