@@ -3,6 +3,7 @@ import { NotFoundError, ValidationError } from '../../shared/exceptions';
 import { IInvoiceDataSource } from '../../domain/interfaces/IInvoiceDataSource';
 import { IWorkOrderDataSource } from '../../domain/interfaces/IWorkOrderDataSource';
 import { IVehicleDataSource } from '../../domain/interfaces/IVehicleDataSource';
+import { IClientDataSource } from '../../domain/interfaces/IClientDataSource';
 import { Invoice, InvoiceItem, Deposit } from '../../domain/entities/Invoice';
 
 export interface CreateInvoiceRequest {
@@ -50,17 +51,20 @@ export class InvoiceService {
   private invoiceDataSource: IInvoiceDataSource;
   private workOrderDataSource: IWorkOrderDataSource;
   private vehicleDataSource: IVehicleDataSource;
+  private clientDataSource: IClientDataSource;
 
   constructor(
     logger: Logger,
     invoiceDataSource: IInvoiceDataSource,
     workOrderDataSource: IWorkOrderDataSource,
-    vehicleDataSource: IVehicleDataSource
+    vehicleDataSource: IVehicleDataSource,
+    clientDataSource: IClientDataSource
   ) {
     this.logger = logger;
     this.invoiceDataSource = invoiceDataSource;
     this.workOrderDataSource = workOrderDataSource;
     this.vehicleDataSource = vehicleDataSource;
+    this.clientDataSource = clientDataSource;
   }
 
   async getAllInvoices(query?: unknown): Promise<InvoiceWithDetails[]> {
@@ -217,9 +221,14 @@ export class InvoiceService {
         if (workOrder) {
           const vehicle = await this.vehicleDataSource.getById(workOrder.vehicleId);
           if (vehicle) {
-            clientName = vehicle.client;
             vehicleInfo = `${vehicle.brand} ${vehicle.model}`;
             placa = vehicle.plate;
+            if (vehicle.clientId) {
+              const client = await this.clientDataSource.getById(vehicle.clientId);
+              clientName = client?.name ?? vehicle.client;
+            } else {
+              clientName = vehicle.client;
+            }
           }
         }
       } catch {

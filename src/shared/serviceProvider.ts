@@ -94,7 +94,8 @@ export class ServiceProvider {
     const invoiceDataSource = this.getInvoiceDataSource();
     const workOrderDataSource = this.getWorkOrderDataSource();
     const vehicleDataSource = this.getVehicleDataSource();
-    return new InvoiceService(logger, invoiceDataSource, workOrderDataSource, vehicleDataSource);
+    const clientDataSource = this.getClientDataSource();
+    return new InvoiceService(logger, invoiceDataSource, workOrderDataSource, vehicleDataSource, clientDataSource);
   }
 
   /**
