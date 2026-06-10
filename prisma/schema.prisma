@@ -183,6 +183,23 @@ model Invoice {
   @@map("invoices")
 }
 
+model SparePart {
+  id           Int      @id @default(autoincrement())
+  workOrderId  Int      @map("work_order_id")
+  invoiceId    Int?     @map("invoice_id")
+  item         String
+  quantity     Int
+  unitCost     Decimal  @db.Decimal(10, 2) @map("unit_cost")
+  unitValue    Decimal  @db.Decimal(10, 2) @map("unit_value")
+  totalCost    Decimal  @db.Decimal(10, 2) @map("total_cost")
+  totalInvoice Decimal  @db.Decimal(10, 2) @map("total_invoice")
+  gananciaNeta Decimal  @db.Decimal(10, 2) @map("ganancia_neta")
+  createdAt    DateTime @default(now()) @map("created_at")
+  updatedAt    DateTime @updatedAt @map("updated_at")
+
+  @@map("spare_parts")
+}
+
 model Appointment {
   id         Int      @id @default(autoincrement())
   date       DateTime

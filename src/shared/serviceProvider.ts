@@ -24,6 +24,9 @@ import { AppointmentPrismaAdapter } from '../infrastructure/DbAdapters/Appointme
 import { InvoicePrismaAdapter } from '../infrastructure/DbAdapters/InvoicePrismaAdapter';
 import { IInvoiceDataSource } from '../domain/interfaces/IInvoiceDataSource';
 import { InvoiceService } from '../application/services/InvoiceService';
+import { SparePartPrismaAdapter } from '../infrastructure/DbAdapters/SparePartPrismaAdapter';
+import { ISparePartDataSource } from '../domain/interfaces/ISparePartDataSource';
+import { SparePartService } from '../application/services/SparePartService';
 import { IUserDataSource } from '../domain/interfaces/IUserDataSource';
 import { ICategoryDataSource } from '../domain/interfaces/ICategoryDataSource';
 import { IProductDataSource } from '../domain/interfaces/IProductDataSource';
@@ -78,6 +81,10 @@ export class ServiceProvider {
     return new EmployeePrismaAdapter();
   }
 
+  static getSparePartDataSource(): ISparePartDataSource {
+    return new SparePartPrismaAdapter();
+  }
+
   static getWorkOrderDataSource(): IWorkOrderDataSource {
     return new WorkOrderPrismaAdapter();
   }
@@ -88,6 +95,11 @@ export class ServiceProvider {
 
   static getInvoiceDataSource(): IInvoiceDataSource {
     return new InvoicePrismaAdapter();
+  }
+
+  static getSparePartService(logger: Logger): SparePartService {
+    const sparePartDataSource = this.getSparePartDataSource();
+    return new SparePartService(logger, sparePartDataSource, this.prismaClient);
   }
 
   static getInvoiceService(logger: Logger): InvoiceService {
@@ -291,4 +303,8 @@ export const getWorkOrderService = (logger: Logger): WorkOrderService => {
 
 export const getInvoiceService = (logger: Logger): InvoiceService => {
   return ServiceProvider.getInvoiceService(logger);
+};
+
+export const getSparePartService = (logger: Logger): SparePartService => {
+  return ServiceProvider.getSparePartService(logger);
 };

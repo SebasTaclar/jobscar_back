@@ -477,6 +477,74 @@ Authorization: Bearer <JWT_TOKEN>
 DELETE http://localhost:7071/api/v1/invoices
 Authorization: Bearer <JWT_TOKEN>
 
+### Spare Parts - List all spare parts
+GET http://localhost:7071/api/v1/spare-parts
+Authorization: Bearer <JWT_TOKEN>
+
+### Spare Parts - Filter by workOrderId
+GET http://localhost:7071/api/v1/spare-parts?workOrderId=1
+Authorization: Bearer <JWT_TOKEN>
+
+### Spare Parts - Filter by invoiceId
+GET http://localhost:7071/api/v1/spare-parts?invoiceId=1
+Authorization: Bearer <JWT_TOKEN>
+
+### Spare Parts - Get spare part by ID
+GET http://localhost:7071/api/v1/spare-parts/1
+Authorization: Bearer <JWT_TOKEN>
+
+### Spare Parts - Create spare part with all fields
+POST http://localhost:7071/api/v1/spare-parts
+Content-Type: application/json
+Authorization: Bearer <JWT_TOKEN>
+
+{
+  "workOrderId": 1,
+  "invoiceId": 1,
+  "item": "Pastillas de freno delanteras",
+  "quantity": 2,
+  "unitCost": 25000,
+  "unitValue": 45000,
+  "totalCost": 50000,
+  "totalInvoice": 90000,
+  "gananciaNeta": 40000
+}
+
+### Spare Parts - Create spare part without invoiceId (solo workOrderId)
+POST http://localhost:7071/api/v1/spare-parts
+Content-Type: application/json
+Authorization: Bearer <JWT_TOKEN>
+
+{
+  "workOrderId": 1,
+  "item": "Filtro de aceite",
+  "quantity": 1,
+  "unitCost": 15000,
+  "unitValue": 25000,
+  "totalCost": 15000,
+  "totalInvoice": 25000,
+  "gananciaNeta": 10000
+}
+
+### Spare Parts - Update spare part
+PUT http://localhost:7071/api/v1/spare-parts/1
+Content-Type: application/json
+Authorization: Bearer <JWT_TOKEN>
+
+{
+  "item": "Pastillas de freno traseras",
+  "quantity": 4,
+  "unitCost": 22000,
+  "unitValue": 42000,
+  "totalCost": 88000,
+  "totalInvoice": 168000,
+  "gananciaNeta": 80000
+}
+
+### Spare Parts - Delete spare part
+DELETE http://localhost:7071/api/v1/spare-parts/1
+Authorization: Bearer <JWT_TOKEN>
+
 ### Create Payment - Zero Quantity (Should fail)
 POST http://localhost:7071/api/v1/payment/create
 Content-Type: application/json
