@@ -386,7 +386,11 @@ Authorization: Bearer <JWT_TOKEN>
   ],
   "formaDePago": "Efectivo",
   "status": "Pendiente",
-  "notes": "Cliente frecuente - aplicar descuento"
+  "notes": "Cliente frecuente - aplicar descuento",
+  "evidences": [
+    { "type": "actual", "url": "https://blob.core.windows.net/evidences/foto-1.jpg" },
+    { "type": "pasada", "url": "https://blob.core.windows.net/evidences/foto-2.jpg" }
+  ]
 }
 
 ### Invoices - Create invoice without workOrderId (solo items)
@@ -424,7 +428,10 @@ Authorization: Bearer <JWT_TOKEN>
   "deposits": [
     { "amount": 175000, "date": "2026-06-10", "method": "Tarjeta de crédito" }
   ],
-  "notes": "Pagado en su totalidad"
+  "notes": "Pagado en su totalidad",
+  "evidences": [
+    { "type": "actual", "url": "https://blob.core.windows.net/evidences/pago-1.jpg" }
+  ]
 }
 
 ### Invoices - Update invoice (agregar items a factura existente)
@@ -445,6 +452,15 @@ Authorization: Bearer <JWT_TOKEN>
   "deposits": [
     { "amount": 80000, "date": "2026-06-09", "method": "Efectivo" }
   ]
+}
+
+### Invoices - Update invoice (limpiar evidencias con null)
+PUT http://localhost:7071/api/v1/invoices/1
+Content-Type: application/json
+Authorization: Bearer <JWT_TOKEN>
+
+{
+  "evidences": null
 }
 
 ### Invoices - Delete invoice

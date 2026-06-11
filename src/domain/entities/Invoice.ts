@@ -11,6 +11,11 @@ export type Deposit = {
   method: string;
 };
 
+export type Evidence = {
+  type: string;
+  url: string;
+};
+
 export type Invoice = {
   id: number;
   workOrderId?: number | null;
@@ -22,6 +27,7 @@ export type Invoice = {
   formaDePago?: string | null;
   status?: string | null;
   notes?: string | null;
+  evidences?: Evidence[] | null;
   createdAt?: Date;
   updatedAt?: Date;
 };

@@ -1,7 +1,7 @@
 import { Prisma } from '@prisma/client';
 import { getPrismaClient } from '../../config/PrismaClient';
 import { IInvoiceDataSource } from '../../domain/interfaces/IInvoiceDataSource';
-import { Invoice, InvoiceItem, Deposit } from '../../domain/entities/Invoice';
+import { Invoice, InvoiceItem, Deposit, Evidence } from '../../domain/entities/Invoice';
 
 export class InvoicePrismaAdapter implements IInvoiceDataSource {
   private readonly prisma = getPrismaClient();
@@ -58,6 +58,7 @@ export class InvoicePrismaAdapter implements IInvoiceDataSource {
         formaDePago: invoice.formaDePago ?? null,
         status: invoice.status ?? 'Pendiente',
         notes: invoice.notes ?? null,
+        evidences: invoice.evidences ? JSON.stringify(invoice.evidences) : null,
       },
     });
 
@@ -82,6 +83,9 @@ export class InvoicePrismaAdapter implements IInvoiceDataSource {
           ...(invoice.formaDePago !== undefined && { formaDePago: invoice.formaDePago }),
           ...(invoice.status !== undefined && { status: invoice.status }),
           ...(invoice.notes !== undefined && { notes: invoice.notes }),
+          ...(invoice.evidences !== undefined && {
+            evidences: invoice.evidences ? JSON.stringify(invoice.evidences) : null,
+          }),
         },
       });
 
@@ -119,6 +123,7 @@ export class InvoicePrismaAdapter implements IInvoiceDataSource {
     formaDePago: string | null;
     status: string;
     notes: string | null;
+    evidences: string | null;
     createdAt: Date;
     updatedAt: Date;
   }): Invoice {
@@ -135,6 +140,9 @@ export class InvoicePrismaAdapter implements IInvoiceDataSource {
       formaDePago: prismaInvoice.formaDePago ?? undefined,
       status: prismaInvoice.status,
       notes: prismaInvoice.notes ?? undefined,
+      evidences: prismaInvoice.evidences
+        ? (JSON.parse(prismaInvoice.evidences) as Evidence[])
+        : [],
       createdAt: prismaInvoice.createdAt,
       updatedAt: prismaInvoice.updatedAt,
     };

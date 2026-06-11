@@ -4,7 +4,7 @@ import { IInvoiceDataSource } from '../../domain/interfaces/IInvoiceDataSource';
 import { IWorkOrderDataSource } from '../../domain/interfaces/IWorkOrderDataSource';
 import { IVehicleDataSource } from '../../domain/interfaces/IVehicleDataSource';
 import { IClientDataSource } from '../../domain/interfaces/IClientDataSource';
-import { Invoice, InvoiceItem, Deposit } from '../../domain/entities/Invoice';
+import { Invoice, InvoiceItem, Deposit, Evidence } from '../../domain/entities/Invoice';
 
 export interface CreateInvoiceRequest {
   workOrderId?: number;
@@ -16,6 +16,7 @@ export interface CreateInvoiceRequest {
   formaDePago?: string;
   status?: string;
   notes?: string;
+  evidences?: Evidence[];
 }
 
 export interface UpdateInvoiceRequest {
@@ -28,6 +29,7 @@ export interface UpdateInvoiceRequest {
   formaDePago?: string | null;
   status?: string | null;
   notes?: string | null;
+  evidences?: Evidence[] | null;
 }
 
 export interface VehicleInfo {
@@ -116,6 +118,13 @@ export class InvoiceService {
 
     const normalized = this.normalizeCreateRequest(createRequest);
 
+    if (normalized.workOrderId) {
+      const workOrder = await this.workOrderDataSource.getById(normalized.workOrderId);
+      if (!workOrder) {
+        throw new ValidationError(`Work order with id ${normalized.workOrderId} does not exist`);
+      }
+    }
+
     try {
       const invoiceData: Invoice = {
         id: 0,
@@ -128,6 +137,7 @@ export class InvoiceService {
         formaDePago: normalized.formaDePago,
         status: normalized.status ?? 'Pendiente',
         notes: normalized.notes,
+        evidences: normalized.evidences,
       };
 
       const newInvoice = await this.invoiceDataSource.create(invoiceData);
@@ -156,6 +166,13 @@ export class InvoiceService {
 
     if (Object.keys(normalized).length === 0) {
       throw new ValidationError('At least one field must be provided for update');
+    }
+
+    if (normalized.workOrderId) {
+      const workOrder = await this.workOrderDataSource.getById(normalized.workOrderId);
+      if (!workOrder) {
+        throw new ValidationError(`Work order with id ${normalized.workOrderId} does not exist`);
+      }
     }
 
     try {
@@ -294,6 +311,16 @@ export class InvoiceService {
         typeof req?.formaDePago === 'string' ? req.formaDePago.trim() || undefined : undefined,
       status: typeof req?.status === 'string' ? req.status.trim() || undefined : undefined,
       notes: typeof req?.notes === 'string' ? req.notes.trim() || undefined : undefined,
+      evidences: Array.isArray(req?.evidences)
+        ? req.evidences
+            .filter(
+              (e) => typeof e?.type === 'string' && typeof e?.url === 'string' && e.url.trim() !== ''
+            )
+            .map((e) => ({
+              type: e.type.trim(),
+              url: e.url.trim(),
+            }))
+        : undefined,
     };
   }
 
@@ -354,6 +381,19 @@ export class InvoiceService {
       normalized.notes = req.notes === null ? null : req.notes.trim() || null;
     }
 
+    if (req?.evidences !== undefined) {
+      normalized.evidences = Array.isArray(req.evidences)
+        ? req.evidences
+            .filter(
+              (e) => typeof e?.type === 'string' && typeof e?.url === 'string' && e.url.trim() !== ''
+            )
+            .map((e) => ({
+              type: e.type.trim(),
+              url: e.url.trim(),
+            }))
+        : null;
+    }
+
     return normalized;
   }
 
@@ -369,6 +409,7 @@ export class InvoiceService {
     if (req.formaDePago !== undefined) payload.formaDePago = req.formaDePago;
     if (req.status !== undefined) payload.status = req.status;
     if (req.notes !== undefined) payload.notes = req.notes;
+    if (req.evidences !== undefined) payload.evidences = req.evidences;
 
     return payload;
   }

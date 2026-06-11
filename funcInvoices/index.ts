@@ -18,6 +18,7 @@ const toInvoiceResponse = (invoice: {
   formaDePago?: string | null;
   status?: string | null;
   notes?: string | null;
+  evidences?: { type: string; url: string }[] | null;
   createdAt?: Date;
   updatedAt?: Date;
   clientName?: string;
@@ -44,6 +45,7 @@ const toInvoiceResponse = (invoice: {
   formaDePago: invoice.formaDePago ?? '',
   status: invoice.status ?? 'Pendiente',
   notes: invoice.notes ?? undefined,
+  evidences: invoice.evidences ?? [],
   createdAt: invoice.createdAt ? invoice.createdAt.toISOString() : '',
   updatedAt: invoice.updatedAt ? invoice.updatedAt.toISOString() : '',
 });
