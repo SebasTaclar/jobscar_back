@@ -17,6 +17,7 @@ export interface CreateInvoiceRequest {
   status?: string;
   notes?: string;
   evidences?: Evidence[];
+  showEvidencesInPdf?: boolean;
 }
 
 export interface UpdateInvoiceRequest {
@@ -30,6 +31,7 @@ export interface UpdateInvoiceRequest {
   status?: string | null;
   notes?: string | null;
   evidences?: Evidence[] | null;
+  showEvidencesInPdf?: boolean | null;
 }
 
 export interface VehicleInfo {
@@ -138,6 +140,7 @@ export class InvoiceService {
         status: normalized.status ?? 'Pendiente',
         notes: normalized.notes,
         evidences: normalized.evidences,
+        showEvidencesInPdf: normalized.showEvidencesInPdf,
       };
 
       const newInvoice = await this.invoiceDataSource.create(invoiceData);
@@ -291,6 +294,7 @@ export class InvoiceService {
             qty: typeof item.qty === 'number' && Number.isFinite(item.qty) ? item.qty : 1,
             price: typeof item.price === 'number' && Number.isFinite(item.price) ? item.price : 0,
             isLabor: typeof item.isLabor === 'boolean' ? item.isLabor : false,
+            discountToTechnician: typeof item.discountToTechnician === 'boolean' ? item.discountToTechnician : true,
           }))
         : undefined,
       taxPct: typeof req?.taxPct === 'boolean' ? req.taxPct : undefined,
@@ -321,6 +325,7 @@ export class InvoiceService {
               url: e.url.trim(),
             }))
         : undefined,
+      showEvidencesInPdf: typeof req?.showEvidencesInPdf === 'boolean' ? req.showEvidencesInPdf : undefined,
     };
   }
 
@@ -343,6 +348,7 @@ export class InvoiceService {
             qty: typeof item.qty === 'number' && Number.isFinite(item.qty) ? item.qty : 1,
             price: typeof item.price === 'number' && Number.isFinite(item.price) ? item.price : 0,
             isLabor: typeof item.isLabor === 'boolean' ? item.isLabor : false,
+            discountToTechnician: typeof item.discountToTechnician === 'boolean' ? item.discountToTechnician : true,
           }))
         : null;
     }
@@ -394,6 +400,10 @@ export class InvoiceService {
         : null;
     }
 
+    if (req?.showEvidencesInPdf !== undefined) {
+      normalized.showEvidencesInPdf = req.showEvidencesInPdf === null ? null : req.showEvidencesInPdf;
+    }
+
     return normalized;
   }
 
@@ -410,6 +420,7 @@ export class InvoiceService {
     if (req.status !== undefined) payload.status = req.status;
     if (req.notes !== undefined) payload.notes = req.notes;
     if (req.evidences !== undefined) payload.evidences = req.evidences;
+    if (req.showEvidencesInPdf !== undefined) payload.showEvidencesInPdf = req.showEvidencesInPdf;
 
     return payload;
   }

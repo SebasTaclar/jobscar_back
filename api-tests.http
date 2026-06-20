@@ -373,9 +373,9 @@ Authorization: Bearer <JWT_TOKEN>
 {
   "workOrderId": 1,
   "items": [
-    { "description": "Cambio de aceite", "qty": 1, "price": 80000, "isLabor": true },
-    { "description": "Filtro de aceite", "qty": 1, "price": 35000, "isLabor": false },
-    { "description": "Alineación y balanceo", "qty": 1, "price": 60000, "isLabor": true }
+    { "description": "Cambio de aceite", "qty": 1, "price": 80000, "isLabor": true, "discountToTechnician": true },
+    { "description": "Filtro de aceite", "qty": 1, "price": 35000, "isLabor": false, "discountToTechnician": false },
+    { "description": "Alineación y balanceo", "qty": 1, "price": 60000, "isLabor": true, "discountToTechnician": true }
   ],
   "taxPct": true,
   "discount": 10000,
@@ -390,7 +390,8 @@ Authorization: Bearer <JWT_TOKEN>
   "evidences": [
     { "type": "actual", "url": "https://blob.core.windows.net/evidences/foto-1.jpg" },
     { "type": "pasada", "url": "https://blob.core.windows.net/evidences/foto-2.jpg" }
-  ]
+  ],
+  "showEvidencesInPdf": true
 }
 
 ### Invoices - Create invoice without workOrderId (solo items)
@@ -400,8 +401,8 @@ Authorization: Bearer <JWT_TOKEN>
 
 {
   "items": [
-    { "description": "Lavado general", "qty": 1, "price": 25000, "isLabor": true },
-    { "description": "Cera líquida", "qty": 1, "price": 15000, "isLabor": false }
+    { "description": "Lavado general", "qty": 1, "price": 25000, "isLabor": true, "discountToTechnician": true },
+    { "description": "Cera líquida", "qty": 1, "price": 15000, "isLabor": false, "discountToTechnician": false }
   ],
   "taxPct": false,
   "status": "Pagado",
@@ -441,10 +442,10 @@ Authorization: Bearer <JWT_TOKEN>
 
 {
   "items": [
-    { "description": "Cambio de aceite", "qty": 1, "price": 80000, "isLabor": true },
-    { "description": "Filtro de aceite", "qty": 1, "price": 35000, "isLabor": false },
-    { "description": "Alineación y balanceo", "qty": 1, "price": 60000, "isLabor": true },
-    { "description": "Pastillas de freno", "qty": 1, "price": 45000, "isLabor": false }
+    { "description": "Cambio de aceite", "qty": 1, "price": 80000, "isLabor": true, "discountToTechnician": true },
+    { "description": "Filtro de aceite", "qty": 1, "price": 35000, "isLabor": false, "discountToTechnician": false },
+    { "description": "Alineación y balanceo", "qty": 1, "price": 60000, "isLabor": true, "discountToTechnician": true },
+    { "description": "Pastillas de freno", "qty": 1, "price": 45000, "isLabor": false, "discountToTechnician": false }
   ],
   "taxPct": true,
   "discount": 15000,

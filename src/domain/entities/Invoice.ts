@@ -3,6 +3,7 @@ export type InvoiceItem = {
   qty: number;
   price: number;
   isLabor: boolean;
+  discountToTechnician: boolean;
 };
 
 export type Deposit = {
@@ -28,6 +29,7 @@ export type Invoice = {
   status?: string | null;
   notes?: string | null;
   evidences?: Evidence[] | null;
+  showEvidencesInPdf?: boolean;
   createdAt?: Date;
   updatedAt?: Date;
 };

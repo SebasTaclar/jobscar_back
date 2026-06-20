@@ -10,7 +10,7 @@ import { verifyToken } from '../src/shared/jwtHelper';
 const toInvoiceResponse = (invoice: {
   id: number;
   workOrderId?: number | null;
-  items?: { description: string; qty: number; price: number; isLabor: boolean }[] | null;
+  items?: { description: string; qty: number; price: number; isLabor: boolean; discountToTechnician: boolean }[] | null;
   taxPct?: boolean | null;
   discount?: number | null;
   retention?: number | null;
@@ -19,6 +19,7 @@ const toInvoiceResponse = (invoice: {
   status?: string | null;
   notes?: string | null;
   evidences?: { type: string; url: string }[] | null;
+  showEvidencesInPdf?: boolean;
   createdAt?: Date;
   updatedAt?: Date;
   clientName?: string;
@@ -46,6 +47,7 @@ const toInvoiceResponse = (invoice: {
   status: invoice.status ?? 'Pendiente',
   notes: invoice.notes ?? undefined,
   evidences: invoice.evidences ?? [],
+  showEvidencesInPdf: invoice.showEvidencesInPdf ?? undefined,
   createdAt: invoice.createdAt ? invoice.createdAt.toISOString() : '',
   updatedAt: invoice.updatedAt ? invoice.updatedAt.toISOString() : '',
 });

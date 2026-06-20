@@ -59,6 +59,7 @@ export class InvoicePrismaAdapter implements IInvoiceDataSource {
         status: invoice.status ?? 'Pendiente',
         notes: invoice.notes ?? null,
         evidences: invoice.evidences ? JSON.stringify(invoice.evidences) : null,
+        showEvidencesInPdf: invoice.showEvidencesInPdf ?? null,
       },
     });
 
@@ -85,6 +86,9 @@ export class InvoicePrismaAdapter implements IInvoiceDataSource {
           ...(invoice.notes !== undefined && { notes: invoice.notes }),
           ...(invoice.evidences !== undefined && {
             evidences: invoice.evidences ? JSON.stringify(invoice.evidences) : null,
+          }),
+          ...(invoice.showEvidencesInPdf !== undefined && {
+            showEvidencesInPdf: invoice.showEvidencesInPdf,
           }),
         },
       });
@@ -124,6 +128,7 @@ export class InvoicePrismaAdapter implements IInvoiceDataSource {
     status: string;
     notes: string | null;
     evidences: string | null;
+    showEvidencesInPdf: boolean | null;
     createdAt: Date;
     updatedAt: Date;
   }): Invoice {
@@ -143,6 +148,7 @@ export class InvoicePrismaAdapter implements IInvoiceDataSource {
       evidences: prismaInvoice.evidences
         ? (JSON.parse(prismaInvoice.evidences) as Evidence[])
         : [],
+      showEvidencesInPdf: prismaInvoice.showEvidencesInPdf ?? undefined,
       createdAt: prismaInvoice.createdAt,
       updatedAt: prismaInvoice.updatedAt,
     };
