@@ -16,6 +16,7 @@ const toMoneyMovementResponse = (movement: {
   amount: number;
   account?: string;
   observation?: string;
+  date?: Date;
   createdAt?: Date;
   updatedAt?: Date;
 }) => ({
@@ -27,6 +28,7 @@ const toMoneyMovementResponse = (movement: {
   amount: movement.amount,
   account: movement.account ?? null,
   observation: movement.observation ?? null,
+  date: movement.date ? movement.date.toISOString() : null,
   createdAt: movement.createdAt ? movement.createdAt.toISOString() : '',
   updatedAt: movement.updatedAt ? movement.updatedAt.toISOString() : '',
 });

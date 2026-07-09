@@ -51,6 +51,7 @@ export class MoneyMovementPrismaAdapter implements IMoneyMovementDataSource {
         amount: moneyMovement.amount,
         account: moneyMovement.account ?? null,
         observation: moneyMovement.observation ?? null,
+        date: moneyMovement.date ?? null,
       },
     });
 
@@ -69,6 +70,7 @@ export class MoneyMovementPrismaAdapter implements IMoneyMovementDataSource {
           ...(moneyMovement.amount !== undefined && { amount: moneyMovement.amount }),
           ...(moneyMovement.account !== undefined && { account: moneyMovement.account }),
           ...(moneyMovement.observation !== undefined && { observation: moneyMovement.observation }),
+          ...(moneyMovement.date !== undefined && { date: moneyMovement.date }),
         },
       });
 
@@ -104,6 +106,7 @@ export class MoneyMovementPrismaAdapter implements IMoneyMovementDataSource {
     amount: Prisma.Decimal;
     account: string | null;
     observation: string | null;
+    date: Date | null;
     createdAt: Date;
     updatedAt: Date;
   }): MoneyMovement {
@@ -116,6 +119,7 @@ export class MoneyMovementPrismaAdapter implements IMoneyMovementDataSource {
       amount: Number(prismaMoneyMovement.amount),
       account: prismaMoneyMovement.account ?? undefined,
       observation: prismaMoneyMovement.observation ?? undefined,
+      date: prismaMoneyMovement.date ?? undefined,
       createdAt: prismaMoneyMovement.createdAt,
       updatedAt: prismaMoneyMovement.updatedAt,
     };

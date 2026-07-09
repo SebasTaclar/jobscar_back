@@ -11,6 +11,7 @@ export interface CreateMoneyMovementRequest {
   amount: number;
   account?: string;
   observation?: string;
+  date?: string;
 }
 
 export interface UpdateMoneyMovementRequest {
@@ -21,6 +22,7 @@ export interface UpdateMoneyMovementRequest {
   amount?: number;
   account?: string;
   observation?: string;
+  date?: string;
 }
 
 export class MoneyMovementService {
@@ -90,6 +92,7 @@ export class MoneyMovementService {
         amount: normalized.amount,
         account: normalized.account,
         observation: normalized.observation,
+        date: normalized.date ? new Date(normalized.date) : undefined,
       };
 
       const newMovement = await this.moneyMovementDataSource.create(movementData);
@@ -187,6 +190,10 @@ export class MoneyMovementService {
         typeof req?.account === 'string' ? req.account.trim() : undefined,
       observation:
         typeof req?.observation === 'string' ? req.observation.trim() : undefined,
+      date:
+        typeof req?.date === 'string' && !Number.isNaN(Date.parse(req.date))
+          ? req.date
+          : undefined,
     };
   }
 
@@ -221,6 +228,12 @@ export class MoneyMovementService {
       normalized.observation = typeof req.observation === 'string' ? req.observation.trim() : undefined;
     }
 
+    if (req?.date !== undefined) {
+      normalized.date = typeof req.date === 'string' && !Number.isNaN(Date.parse(req.date))
+        ? req.date
+        : undefined;
+    }
+
     return normalized;
   }
 
@@ -234,6 +247,7 @@ export class MoneyMovementService {
     if (req.amount !== undefined) payload.amount = req.amount;
     if (req.account !== undefined) payload.account = req.account;
     if (req.observation !== undefined) payload.observation = req.observation;
+    if (req.date !== undefined) payload.date = new Date(req.date);
 
     return payload;
   }

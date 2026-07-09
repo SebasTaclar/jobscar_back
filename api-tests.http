@@ -602,7 +602,8 @@ Authorization: Bearer <JWT_TOKEN>
   "movement": "INGRESO",
   "amount": 150000,
   "account": "Caja Principal",
-  "observation": "Pago en efectivo"
+  "observation": "Pago en efectivo",
+  "date": "2026-07-01T10:00:00.000Z"
 }
 
 ### Money Movements - Create money movement with required fields only
@@ -627,7 +628,8 @@ Authorization: Bearer <JWT_TOKEN>
   "concept": "Fondos para operaciones",
   "movement": "TRANSFERENCIA",
   "amount": 200000,
-  "account": "Banco Principal"
+  "account": "Banco Principal",
+  "date": "2026-07-05T14:30:00.000Z"
 }
 
 ### Money Movements - Create with missing required fields (should fail 400)
@@ -670,7 +672,8 @@ Authorization: Bearer <JWT_TOKEN>
   "movement": "INGRESO",
   "amount": 175000,
   "account": "Caja Principal",
-  "observation": "Pago en efectivo - actualizado"
+  "observation": "Pago en efectivo - actualizado",
+  "date": "2026-07-08T09:00:00.000Z"
 }
 
 ### Money Movements - Update money movement - partial fields
@@ -680,7 +683,8 @@ Authorization: Bearer <JWT_TOKEN>
 
 {
   "amount": 200000,
-  "observation": "Monto corregido"
+  "observation": "Monto corregido",
+  "date": "2026-07-10T12:00:00.000Z"
 }
 
 ### Money Movements - Update money movement - change movement type

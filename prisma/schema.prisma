@@ -246,6 +246,7 @@ model MoneyMovement {
   amount      Decimal  @db.Decimal(10, 2)
   account     String?
   observation String?
+  date        DateTime? @map("date")
   createdAt   DateTime @default(now()) @map("created_at")
   updatedAt   DateTime @updatedAt @map("updated_at")
 
